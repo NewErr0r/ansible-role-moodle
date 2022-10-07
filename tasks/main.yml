@@ -1,0 +1,69 @@
+---
+- name: Install LEMP stack | install NGINX 
+  dnf: 
+    name: nginx 
+    state: latest 
+
+- name: Install LEMP stack | install MariaDB
+  dnf: 
+    name: 
+      - mariadb-server
+      - python3-PyMySQL
+
+- name: Install LEMP stack | install PHP-FPM
+  dnf: 
+    name: 
+      - php-fpm
+      - php-mysqlnd
+    state: latest
+
+- name: Configure LEMP stack | Start and enable MariaDB/NGINX/PHP-FPM
+  service: 
+    name: "{{ item }}" 
+    state: started 
+    enabled: true
+  loop:
+    - mariadb 
+    - nginx 
+    - php-fpm
+
+- name: Configure LEMP stack | Set a password to the root user for MariaDB
+  mysql_user:
+    check_implicit_admin: true
+    login_user: root 
+    login_password: "{{ mariadb_root_pass }}"
+    user: root 
+    password: "{{ mariadb_root_pass }}"
+    host: localhost 
+
+
+- name: Configure LEMP stack | Changing 'www.conf' user/group = nginx
+  lineinfile:
+    path: /etc/php-fpm.d/www.conf
+    regexp: "^{{ item }} = apache"
+    line: "{{ item }} = nginx"
+  loop: 
+    - user 
+    - group
+
+- name: Installing PHP Extensions
+  dnf: 
+    name: "{{ extensions_php }}"
+    state: latest
+
+- name: Configure MariaDB | Create database for Moodle
+  mysql_db:
+    name: "{{ db_name }}"
+    state: present
+    login_user: root 
+    login_password: "{{ mariadb_root_pass }}"
+
+- name: Configure MariaDB | Create user database for Moodle
+  community.mysql.mysql_user:
+    name: "{{ db_user_name }}"
+    password: "{{ db_user_pass }}"
+    priv: '*.*:ALL,GRANT'
+    host: '%'
+    state: present
+    login_user: root
+    login_password: "{{ mariadb_root_pass }}"

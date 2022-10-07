@@ -1,0 +1,11 @@
+# The root user password for MariaDB
+mariadb_root_pass: "P@ssw0rd"
+
+# DB name for Moodle
+db_name: "moodledb"
+
+# DB user name for Moodle 
+db_user_name: "moodleadmin"
+
+# DB user pass for Moodle 
+db_user_pass: "P@ssw0rd"
