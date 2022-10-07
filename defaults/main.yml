@@ -9,3 +9,7 @@ db_user_name: "moodleadmin"
 
 # DB user pass for Moodle 
 db_user_pass: "P@ssw0rd"
+
+# Download Moodle
+download_moodle: "https://download.moodle.org/download.php/direct/stable39/moodle-latest-39.tgz"
+path_download_moodle: /var/www/html

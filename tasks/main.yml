@@ -67,3 +67,31 @@
     state: present
     login_user: root
     login_password: "{{ mariadb_root_pass }}"
+
+- name: Downloading "Moodle 3.9" from the official website
+  get_url:
+    url: "{{ download_moodle }}"
+    dest: "{{ path_download_moodle }}"
+
+- name: Unzip the Moodle 
+  unarchive:
+    src: "{{ path_download_moodle }}/moodle-latest-39.tgz"
+    dest: "{{ path_download_moodle }}"
+    remote_src: yes
+
+- name: Granting rights to the moodle
+  file:
+    path: "{{ path_download_moodle }}/moodle"
+    state: directory
+    recurse: yes
+    owner: nginx
+    group: nginx 
+    mode: "0775"
+
+- name: Creating a directory for Moodle files
+  file:
+    path: "{{ path_download_moodle }}/moodledata"
+    state: directory
+    recurse: yes
+    group: nginx 
+    mode: "0770"
