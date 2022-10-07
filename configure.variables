@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo '1) Set the password to the root user for MariaDB: ' 
+    read root_pass_mariadb 
+    sed -i 's/^mariadb_root_pass:.*/mariadb_root_pass: "'$root_pass_mariadb'"/g' ./ansible-role-moodle/defaults/main.yml
+
+echo '2) Enter the database name for Moodle: '
+    read db_name
+    sed -i 's/^db_name:.*/db_name: "'$db_name'"/g' ./ansible-role-moodle/defaults/main.yml
+
+echo '3) Enter the database user name for Moodle: '
+    read db_user_name
+    sed -i 's/^db_user_name:.*/db_user_name: "'$db_user_name'"/g' ./ansible-role-moodle/defaults/main.yml
+
+echo '4) Enter the database user password for Moodle: '
+    read db_user_pass
+    sed -i 's/^db_user_pass:.*/db_user_pass: "'$db_user_pass'"/g' ./ansible-role-moodle/defaults/main.yml
