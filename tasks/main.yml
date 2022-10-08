@@ -95,3 +95,16 @@
     recurse: yes
     group: nginx 
     mode: "0770"
+
+- name: Configure file 'config.php' | Copy template for config.php 
+  copy:
+    src: "{{ path_download_moodle }}/moodle/config-dist.php"
+    dest: "{{ path_download_moodle }}/moodle/config.php"
+    remote_src: yes 
+
+- name: Configure file 'config.php' | Editing file 'config.php'
+  command:
+    cmd: sed -i "s/^{{ item.regexp }}.*/{{ item.regexp }}    = '{{ item.line }}';/g" {{ path_download_moodle }}/moodle/config.php
+  loop:
+    - { regexp: $CFG->dbtype, line: 'mariadb' } 
+    - { regexp: $CFG->dbname, line: '{{ db_name }}' }
