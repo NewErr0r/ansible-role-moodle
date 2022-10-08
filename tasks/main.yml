@@ -108,3 +108,4 @@
   loop:
     - { regexp: $CFG->dbtype, line: 'mariadb' } 
     - { regexp: $CFG->dbname, line: '{{ db_name }}' }
+    - { regexp: $CFG->dbuser, line: '{{ db_user_name }}' }
