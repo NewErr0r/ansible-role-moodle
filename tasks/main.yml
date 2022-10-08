@@ -109,3 +109,6 @@
     - { regexp: $CFG->dbtype, line: 'mariadb' } 
     - { regexp: $CFG->dbname, line: '{{ db_name }}' }
     - { regexp: $CFG->dbuser, line: '{{ db_user_name }}' }
+    - { regexp: $CFG->dbpass, line: '{{ db_user_pass }}' }
+    - { regexp: $CFG->wwwroot, line: 'http{{ ansible_ssh_host }}' }
+    - { regexp: $CFG->dataroot, line: '{{ {{ path_download_moodle }}/moodledata }}'}
