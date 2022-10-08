@@ -106,9 +106,7 @@
   command:
     cmd: sed -i "s/^{{ item.regexp }}.*/{{ item.regexp }}    = '{{ item.line }}';/g" {{ path_download_moodle }}/moodle/config.php
   loop:
-    - { regexp: $CFG->dbtype, line: 'mariadb' } 
+    - { regexp: $CFG->dbtype, line: mariadb } 
     - { regexp: $CFG->dbname, line: '{{ db_name }}' }
     - { regexp: $CFG->dbuser, line: '{{ db_user_name }}' }
     - { regexp: $CFG->dbpass, line: '{{ db_user_pass }}' }
-    - { regexp: $CFG->wwwroot, line: 'http{{ ansible_ssh_host }}' }
-    - { regexp: $CFG->dataroot, line: '{{ {{ path_download_moodle }}/moodledata }}'}
