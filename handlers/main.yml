@@ -1,2 +1,14 @@
 ---
-# handlers file for ansible-role-moodle
+- name: Start ngix and php-fpm
+  service: 
+    name:  "{{ item }}"
+    state: started 
+    enabled: true
+  loop:
+    - nginx
+    - php-fpm
+
+- name: Restart firewalld
+  service:
+   name: firewalld
+   state: restarted

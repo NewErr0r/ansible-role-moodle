@@ -103,10 +103,39 @@
     remote_src: yes 
 
 - name: Configure file 'config.php' | Editing file 'config.php'
-  command:
-    cmd: sed -i "s/^{{ item.regexp }}.*/{{ item.regexp }}    = '{{ item.line }}';/g" {{ path_download_moodle }}/moodle/config.php
-  loop:
-    - { regexp: $CFG->dbtype, line: mariadb } 
-    - { regexp: $CFG->dbname, line: '{{ db_name }}' }
-    - { regexp: $CFG->dbuser, line: '{{ db_user_name }}' }
-    - { regexp: $CFG->dbpass, line: '{{ db_user_pass }}' }
+  template:
+    src: config.php.j2
+    dest: "{{ path_download_moodle }}/moodle/config.php"
+
+- name: Configure NGINX | Create a 'moodle.conf' file for nginx
+  template: 
+    src: moodle.conf.j2
+    dest: "{{ nginx_moodle_conf }}"
+  notify: 
+    - Start ngix and php-fpm
+
+- name: Configure SELinux | Set httpd_can_network_connect
+  command: 
+    cmd: setsebool -P httpd_can_network_connect on
+
+- name: Configure SELinux | SELinux allow
+  command: 
+    cmd: chcon -R --type httpd_sys_rw_content_t {{ path_download_moodle }}
+
+- name: Configure firewalld for http trafic
+  firewalld: 
+    service: http 
+    permanent: yes 
+    state: enabled 
+  notify: 
+    - Restart firewalld
+
+- name: Credentials
+  debug:
+    msg: 
+      - "Open the browser 'http://{{ ansible_ssh_host }}'"
+      - "#######################################################"
+      - "database ---> '{{ db_name }}'"
+      - "user db  ---> '{{ db_user_name }}'"
+      - "password ---> '{{ db_user_pass }}'"
+      - "#######################################################"
