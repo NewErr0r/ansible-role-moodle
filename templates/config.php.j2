@@ -1,0 +1,25 @@
+<?php
+unset($CFG);  
+global $CFG;  
+$CFG = new stdClass();
+$CFG->dbtype    = 'mariadb';      
+$CFG->dblibrary = 'native';     
+$CFG->dbhost    = 'localhost';  
+$CFG->dbname    = '{{ db_name }}';     
+$CFG->dbuser    = '{{ db_user_name }}';   
+$CFG->dbpass    = '{{ db_user_pass }}';   
+$CFG->prefix    = 'mdl_';       
+$CFG->dboptions = array(
+    'dbpersist' => false,                                                                       
+    'dbsocket'  => false,       
+    'dbport'    => '',          
+    'dbhandlesoptions' => false,     
+    'dbcollation' => 'utf8mb4_unicode_ci',      
+    'fetchbuffersize' => 100000,
+);
+
+$CFG->wwwroot   = 'http://{{ ansible_ssh_host }}';
+$CFG->dataroot  = '{{ path_download_moodle }}/moodledata';
+$CFG->directorypermissions = 02777;
+$CFG->admin = 'admin';
+require_once(__DIR__ . '/lib/setup.php');
