@@ -7,10 +7,10 @@
 
     ---
     - name: Deploy Moodle
-    hosts: all 
-    become: true 
+      hosts: all 
+      become: true 
 
-    roles: 
+      roles: 
         - ansible-role-moodle
 
 <p>
